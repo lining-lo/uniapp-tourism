@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "首页",
+  "usingComponents": {
+    "up-button": "../../uni_modules/uview-plus/components/u-button/u-button"
+  }
+}
