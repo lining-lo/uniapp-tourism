@@ -11,19 +11,22 @@
         {
             "path": "pages/index/index",
             "style": {
-                "navigationBarTitleText": "首页"
+                "navigationBarTitleText": "旅游小程序",
+				"navigationBarBackgroundColor": "#fff"
             }
         },
         {
             "path": "pages/like/like",
             "style": {
-                "navigationBarTitleText": ""
+                "navigationBarTitleText": "喜爱",
+				"navigationBarBackgroundColor": "#fff"
             }
         },
         {
             "path": "pages/my/my",
             "style": {
-                "navigationBarTitleText": ""
+                "navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#fff"
             }
         }
     ],

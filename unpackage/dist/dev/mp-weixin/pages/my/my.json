@@ -1,4 +1,8 @@
 {
-  "navigationBarTitleText": "",
-  "usingComponents": {}
+  "navigationBarTitleText": "我的",
+  "navigationBarBackgroundColor": "#fff",
+  "usingComponents": {
+    "up-icon": "../../uni_modules/uview-plus/components/u-icon/u-icon",
+    "up-popup": "../../uni_modules/uview-plus/components/u-popup/u-popup"
+  }
 }

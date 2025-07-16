@@ -1,1 +1,1 @@
-<view></view>
+<view class="aa"><view class="bb"> aaa </view></view>
