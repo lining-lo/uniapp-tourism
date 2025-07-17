@@ -60,6 +60,12 @@ const _sfc_main = {
         duration: 300
       });
     };
+    const toDetail = (item) => {
+      const can = JSON.stringify(item);
+      common_vendor.index.navigateTo({
+        url: `/pages/detail/detail?item=${encodeURIComponent(can)}`
+      });
+    };
     common_vendor.onLoad(() => {
       getbannerList();
       getWaterfallList();
@@ -105,7 +111,8 @@ const _sfc_main = {
                   };
                 }),
                 f: common_vendor.t(item.isDot),
-                g: index
+                g: common_vendor.o(($event) => toDetail(item), index),
+                h: index
               };
             }),
             b: i0,
@@ -124,7 +131,7 @@ const _sfc_main = {
               return {
                 a: "7fef823c-5-" + i0 + "-" + i1 + ",7fef823c-3",
                 b: common_vendor.p({
-                  threshold: "-450",
+                  threshold: "200",
                   ["border-radius"]: "10",
                   image: item.img,
                   index
@@ -138,7 +145,8 @@ const _sfc_main = {
                   };
                 }),
                 f: common_vendor.t(item.isDot),
-                g: index
+                g: common_vendor.o(($event) => toDetail(item), index),
+                h: index
               };
             }),
             b: i0,

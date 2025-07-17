@@ -14,9 +14,11 @@
 			<view class="top-card">
 				<view class="card-user">
 					<view @click="toLogin" class="user-avator" style="margin-right: 20rpx">
-						<image src="/static/tt.jpg" mode=""></image>
+						<image v-if="!userInfo.avatarUrl" src="/static/tt.jpg" mode=""></image>
+						<image v-else :src="userInfo.avatarUrl" mode=""></image>
 					</view>
-					<view class="user-name">登录 / 注册</view>
+					<view v-if="!userInfo.nickName" class="user-name">登录 / 注册</view>
+					<view v-else class="user-name">{{userInfo.nickName}}</view>
 				</view>
 				<view class="card-info">
 					<view class="info-praise">
@@ -94,8 +96,19 @@
 			<view class="popup">
 				<view class="popup-title">
 					<span>获取您的昵称、头像</span>
-					<span style="float: right;padding-right: 20rpx;">×</span>
+					<span @click="isShowPopup = false" style="float: right; padding-right: 20rpx">×</span>
 				</view>
+				<view class="popup-avatar">
+					<view class="avatar-label">获取用户头像</view>
+					<button open-type="chooseAvatar" @chooseavatar="onchooseavatar">
+						<image class="avatar-img" :src="userInfo.avatarUrl"></image>
+					</button>
+				</view>
+				<view class="popup-name">
+					<view class="name-label">获取用户名称：</view>
+					<input @input="changeName" v-model="userInfo.nickName" type="nickname" />
+				</view>
+				<button size="default" type="primary" @click="submit">确定</button>
 			</view>
 		</up-popup>
 	</view>
@@ -104,17 +117,33 @@
 <script setup>
 import { onLoad } from '@dcloudio/uni-app';
 import { getUserInfo, login } from '../../api/api';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 // 控制弹出层
-const isShowPopup = ref(true);
+const isShowPopup = ref(false);
 // 关闭弹出层
-const close = ()=>{
-	isShowPopup.value = false
-}
+const close = () => {
+	isShowPopup.value = false;
+};
+// 选择头像
+const onchooseavatar = (e) => {
+	userInfo.value.avatarUrl = e.detail.avatarUrl;
+};
+// 选择姓名
+const changeName = (e) => {
+	userInfo.value.nickName = e.detail.value;
+};
+// 更改用户信息
+const submit = () => {
+	uni.setStorageSync('userInfo', JSON.stringify(userInfo.value));
+	isShowPopup.value = false;
+};
 
 // 用户信息
-const userInfo = ref();
+const userInfo = ref({
+	avatarUrl: '',
+	nickName: ''
+});
 // 微信授权
 const toLogin = () => {
 	uni.showModal({
@@ -127,7 +156,7 @@ const toLogin = () => {
 						const { token } = await login(data.code);
 						uni.setStorageSync('token', token);
 						const result = await getUserInfo();
-						userInfo.value = result;
+						userInfo.value.avatarUrl = result.avatarUrl;
 						isShowPopup.value = true;
 					}
 				});
@@ -135,6 +164,18 @@ const toLogin = () => {
 		}
 	});
 };
+
+onLoad(async()=>{
+	if(uni.getStorageSync('token') && !uni.getStorageSync('userInfo')){
+		const {avatarUrl,nickName} = await getUserInfo()
+		userInfo.value.avatarUrl = avatarUrl
+		userInfo.value.nickName = nickName
+	}else if(uni.getStorageSync('token') && uni.getStorageSync('userInfo')){
+		const {avatarUrl,nickName} = JSON.parse(uni.getStorageSync('userInfo'))
+		userInfo.value.avatarUrl = avatarUrl
+		userInfo.value.nickName = nickName
+	}
+})
 </script>
 
 <style lang="scss">
@@ -239,15 +280,46 @@ const toLogin = () => {
 			}
 		}
 	}
-	.popup{
+	.popup {
 		padding: 20rpx;
 		border-radius: 20rpx 20rpx 0 0;
-		.popup-title{
+		.popup-title {
 			width: 100%;
 			text-align: center;
 			margin-bottom: 20rpx;
 			font-size: 40rpx;
 		}
+		.popup-avatar {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			border-bottom: 1px solid #f5f5f5;
+			padding: 24rpx 0;
+			button {
+				border: none;
+				border-radius: 10rpx;
+				width: 70rpx;
+				height: 70rpx;
+				margin-left: 20rpx;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 0;
+				image {
+					width: 70rpx;
+					height: 70rpx;
+				}
+			}
+		}
+		.popup-name {
+			display: flex;
+			align-items: center;
+			border-bottom: 1px solid #f5f5f5;
+			padding: 24rpx 0;
+		}
 	}
+}
+.u-safe-bottom {
+	display: none;
 }
 </style>

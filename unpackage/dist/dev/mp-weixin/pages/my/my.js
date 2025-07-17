@@ -15,8 +15,21 @@ if (!Math) {
 const _sfc_main = {
   __name: "my",
   setup(__props) {
-    const isShowPopup = common_vendor.ref(true);
-    const userInfo = common_vendor.ref();
+    const isShowPopup = common_vendor.ref(false);
+    const onchooseavatar = (e) => {
+      userInfo.value.avatarUrl = e.detail.avatarUrl;
+    };
+    const changeName = (e) => {
+      userInfo.value.nickName = e.detail.value;
+    };
+    const submit = () => {
+      common_vendor.index.setStorageSync("userInfo", JSON.stringify(userInfo.value));
+      isShowPopup.value = false;
+    };
+    const userInfo = common_vendor.ref({
+      avatarUrl: "",
+      nickName: ""
+    });
     const toLogin = () => {
       common_vendor.index.showModal({
         title: "温馨提示",
@@ -28,7 +41,7 @@ const _sfc_main = {
                 const { token } = await api_api.login(data.code);
                 common_vendor.index.setStorageSync("token", token);
                 const result = await api_api.getUserInfo();
-                userInfo.value = result;
+                userInfo.value.avatarUrl = result.avatarUrl;
                 isShowPopup.value = true;
               }
             });
@@ -36,8 +49,19 @@ const _sfc_main = {
         }
       });
     };
+    common_vendor.onLoad(async () => {
+      if (common_vendor.index.getStorageSync("token") && !common_vendor.index.getStorageSync("userInfo")) {
+        const { avatarUrl, nickName } = await api_api.getUserInfo();
+        userInfo.value.avatarUrl = avatarUrl;
+        userInfo.value.nickName = nickName;
+      } else if (common_vendor.index.getStorageSync("token") && common_vendor.index.getStorageSync("userInfo")) {
+        const { avatarUrl, nickName } = JSON.parse(common_vendor.index.getStorageSync("userInfo"));
+        userInfo.value.avatarUrl = avatarUrl;
+        userInfo.value.nickName = nickName;
+      }
+    });
     return (_ctx, _cache) => {
-      return {
+      return common_vendor.e({
         a: common_vendor.p({
           name: "gift-fill",
           color: "#fff",
@@ -53,24 +77,17 @@ const _sfc_main = {
           color: "#fff",
           size: "28"
         }),
-        d: common_assets._imports_0,
-        e: common_vendor.o(toLogin),
-        f: common_vendor.p({
-          name: "photo",
-          color: "##959495"
-        }),
-        g: common_vendor.p({
-          name: "arrow-right",
-          color: "##959495"
-        }),
-        h: common_vendor.p({
-          name: "photo",
-          color: "##959495"
-        }),
-        i: common_vendor.p({
-          name: "arrow-right",
-          color: "##959495"
-        }),
+        d: !userInfo.value.avatarUrl
+      }, !userInfo.value.avatarUrl ? {
+        e: common_assets._imports_0
+      } : {
+        f: userInfo.value.avatarUrl
+      }, {
+        g: common_vendor.o(toLogin),
+        h: !userInfo.value.nickName
+      }, !userInfo.value.nickName ? {} : {
+        i: common_vendor.t(userInfo.value.nickName)
+      }, {
         j: common_vendor.p({
           name: "photo",
           color: "##959495"
@@ -96,10 +113,32 @@ const _sfc_main = {
           color: "##959495"
         }),
         p: common_vendor.p({
+          name: "photo",
+          color: "##959495"
+        }),
+        q: common_vendor.p({
+          name: "arrow-right",
+          color: "##959495"
+        }),
+        r: common_vendor.p({
+          name: "photo",
+          color: "##959495"
+        }),
+        s: common_vendor.p({
+          name: "arrow-right",
+          color: "##959495"
+        }),
+        t: common_vendor.o(($event) => isShowPopup.value = false),
+        v: userInfo.value.avatarUrl,
+        w: common_vendor.o(onchooseavatar),
+        x: common_vendor.o([($event) => userInfo.value.nickName = $event.detail.value, changeName]),
+        y: userInfo.value.nickName,
+        z: common_vendor.o(submit),
+        A: common_vendor.p({
           show: isShowPopup.value,
           round: "20"
         })
-      };
+      });
     };
   }
 };

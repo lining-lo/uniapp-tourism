@@ -6,7 +6,7 @@
 		<view class="waterfall">
 			<up-waterfall v-model="waterfallList">
 				<template v-slot:left="{ leftList }">
-					<view class="waterfall-item" v-for="(item, index) in leftList" :key="index">
+					<view class="waterfall-item" @click=toDetail(item) v-for="(item, index) in leftList" :key="index">
 						<up-lazy-load threshold="-450" border-radius="10" :image="item.img" :index="index"></up-lazy-load>
 						<view class="item-title">
 							{{ item.title }}
@@ -25,8 +25,8 @@
 					</view>
 				</template>
 				<template v-slot:right="{ rightList }">
-					<view class="waterfall-item" v-for="(item, index) in rightList" :key="index">
-						<up-lazy-load threshold="-450" border-radius="10" :image="item.img" :index="index"></up-lazy-load>
+					<view class="waterfall-item"  @click=toDetail(item) v-for="(item, index) in rightList" :key="index">
+						<up-lazy-load threshold="200" border-radius="10" :image="item.img" :index="index"></up-lazy-load>
 						<view class="item-title">
 							{{ item.title }}
 						</view>
@@ -109,6 +109,14 @@ const toTop = () => {
 		duration: 300
 	});
 };
+
+// 跳转到详情页
+const toDetail = (item)=>{
+	const can = JSON.stringify(item)
+	uni.navigateTo({
+		url:`/pages/detail/detail?item=${encodeURIComponent(can)}`
+	})
+}
 
 onLoad(() => {
 	getbannerList();

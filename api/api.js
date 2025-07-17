@@ -28,3 +28,10 @@ export const login = (data) => {
 export const getUserInfo = () => {
 	return http('/getUserInfo')
 }
+
+// 路线
+export const getProjectInfo = (id) => {
+	return http('/project/info', {
+		id
+	})
+}
