@@ -24,7 +24,7 @@ export const login = (data) => {
 		'POST')
 }
 
-// 获取用户信息
+// 用户信息
 export const getUserInfo = () => {
 	return http('/getUserInfo')
 }
@@ -34,4 +34,9 @@ export const getProjectInfo = (id) => {
 	return http('/project/info', {
 		id
 	})
+}
+
+// 喜爱
+export const getLike = () => {
+	return http('/like/list')
 }

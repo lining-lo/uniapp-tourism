@@ -1,1 +1,1 @@
-<view class="aa"><view class="bb"> aaa </view></view>
+<view class="like"><view wx:for="{{a}}" wx:for-item="item" wx:key="e" class="like-item" bindtap="{{item.d}}"><image wx:if="{{b}}" src="{{item.a}}" mode=""></image><view wx:if="{{c}}" class="item-title">{{item.b}}</view><view wx:if="{{d}}" class="item-introduce">{{item.c}}</view><view class="item-tag">喜爱</view></view></view>

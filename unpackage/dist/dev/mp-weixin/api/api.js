@@ -26,8 +26,12 @@ const getProjectInfo = (id) => {
     id
   });
 };
+const getLike = () => {
+  return api_http.http("/like/list");
+};
 exports.getBanner = getBanner;
 exports.getHomeList = getHomeList;
+exports.getLike = getLike;
 exports.getProject = getProject;
 exports.getProjectInfo = getProjectInfo;
 exports.getUserInfo = getUserInfo;
